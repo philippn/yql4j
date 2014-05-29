@@ -12,6 +12,7 @@ import java.util.Map;
 
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.exception.OAuthException;
+import oauth.signpost.signature.HmacSha1MessageSigner;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -92,8 +93,12 @@ public class DefaultYqlClient implements YqlClient {
 		boolean oAuth = (query.getConsumerKey() != null) && 
 				(query.getConsumerSecret() != null);
 		if (oAuth) {
+			// We are doing two-legged OAuth
 			CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(
 					query.getConsumerKey(), query.getConsumerSecret());
+			consumer.setMessageSigner(new HmacSha1MessageSigner());
+			consumer.setSendEmptyTokens(true);
+			consumer.setTokenWithSecret("", "");
 			consumer.sign(request);
 		}
 		return request;
