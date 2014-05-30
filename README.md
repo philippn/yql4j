@@ -17,10 +17,11 @@ YqlResult result = client.query(query);
 String rawResult = result.getContentAsString();
 
 // But if you are lazy, you may also get the content mapped as object graph
-// Please note though: You will have to provide your own mapping classes!
-QueryResultType<PlaceCollectionType, PlaceType> mappedResult = 
+// Please note though: You will have to provide your own mapping classes, 
+// i.e. PlaceCollectionType and PlaceType!
+QueryResultType<PlaceCollectionType> mappedResult = 
 		result.getContentAsMappedObject(
-				new TypeReference<QueryResultType<PlaceCollectionType, PlaceType>>() {});
+				new TypeReference<QueryResultType<PlaceCollectionType>>() {});
 for (PlaceType item : mappedResult.getResults().getContent()) {
 	// Do something with the item
 }

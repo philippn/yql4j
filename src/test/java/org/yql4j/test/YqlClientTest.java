@@ -54,7 +54,7 @@ public class YqlClientTest {
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
 		assertTrue(result.getContentAsMappedObject(
-				new TypeReference<QueryResultType<PlaceCollectionType, PlaceType>>() {}).
+				new TypeReference<QueryResultType<PlaceCollectionType>>() {}).
 				getResults() == null);
 	}
 
@@ -63,9 +63,9 @@ public class YqlClientTest {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Atlantic Ocean'");
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType, PlaceType> results = 
+		QueryResultType<PlaceCollectionType> results = 
 				result.getContentAsMappedObject(
-						new TypeReference<QueryResultType<PlaceCollectionType, PlaceType>>() {});
+						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
 		assertEquals(1, results.getCount());
 		assertNotNull(results.getResults());
 		PlaceType atlantic = results.getResults().getContent()[0];
@@ -78,9 +78,9 @@ public class YqlClientTest {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Atlantic Ocean' or name='Indian Ocean'");
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType, PlaceType> results = 
+		QueryResultType<PlaceCollectionType> results = 
 				result.getContentAsMappedObject(
-						new TypeReference<QueryResultType<PlaceCollectionType, PlaceType>>() {});
+						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
 		assertEquals(2, results.getCount());
 		assertNotNull(results.getResults());
 		PlaceType atlantic = results.getResults().getContent()[0];
@@ -98,7 +98,7 @@ public class YqlClientTest {
 		query.setFormat(ResultFormat.JSON);
 		YqlResult result = client.query(query);
 		assertTrue(result.getContentAsMappedObject(
-				new TypeReference<QueryResultType<PlaceCollectionType, PlaceType>>() {}).
+				new TypeReference<QueryResultType<PlaceCollectionType>>() {}).
 				getResults() == null);
 	}
 
@@ -108,9 +108,9 @@ public class YqlClientTest {
 		query.setDiagnostics(true);
 		query.setFormat(ResultFormat.JSON);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType, PlaceType> results = 
+		QueryResultType<PlaceCollectionType> results = 
 				result.getContentAsMappedObject(
-						new TypeReference<QueryResultType<PlaceCollectionType, PlaceType>>() {});
+						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
 		assertEquals(1, results.getCount());
 		assertNotNull(results.getResults());
 		PlaceType atlantic = results.getResults().getContent()[0];
@@ -124,9 +124,9 @@ public class YqlClientTest {
 		query.setDiagnostics(true);
 		query.setFormat(ResultFormat.JSON);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType, PlaceType> results = 
+		QueryResultType<PlaceCollectionType> results = 
 				result.getContentAsMappedObject(
-						new TypeReference<QueryResultType<PlaceCollectionType, PlaceType>>() {});
+						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
 		assertEquals(2, results.getCount());
 		assertNotNull(results.getResults());
 		PlaceType atlantic = results.getResults().getContent()[0];

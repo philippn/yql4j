@@ -67,8 +67,8 @@ public final class YqlResult {
 	 * @return the content as mapped object graph
 	 * @throws IOException
 	 */
-	public <CT extends ResultCollectionType<VT>, VT> QueryResultType<CT, VT> getContentAsMappedObject(
-			TypeReference<QueryResultType<CT, VT>> valueTypeRef) throws IOException {
+	public <T extends ResultCollectionType<?>> QueryResultType<T> getContentAsMappedObject(
+			TypeReference<QueryResultType<T>> valueTypeRef) throws IOException {
 		return objectMapper.readValue(content, valueTypeRef);
 	}
 }

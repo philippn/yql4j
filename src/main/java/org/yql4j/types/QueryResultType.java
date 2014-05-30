@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
  *
  */
 @JsonRootName(value="query")
-public class QueryResultType<CT extends ResultCollectionType<VT>, VT> {
+public class QueryResultType<CT extends ResultCollectionType<?>> {
 
 	private int count;
 	private String created;
