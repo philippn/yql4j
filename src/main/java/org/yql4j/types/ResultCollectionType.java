@@ -8,7 +8,7 @@ package org.yql4j.types;
  * @author Philipp
  *
  */
-public abstract class ResultCollectionType<T> {
+public abstract class ResultCollectionType<VT> {
 
-	public abstract T[] getContent();
+	public abstract VT[] getContent();
 }
