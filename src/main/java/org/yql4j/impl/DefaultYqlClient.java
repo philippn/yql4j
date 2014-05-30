@@ -131,7 +131,7 @@ public class DefaultYqlClient implements YqlClient {
 		boolean oAuth = (query.getConsumerKey() != null) && 
 				(query.getConsumerSecret() != null);
 		if (oAuth) {
-			// We are doing two-legged OAuth
+			// We are only signing the request at this point
 			CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(
 					query.getConsumerKey(), query.getConsumerSecret());
 			consumer.sign(request);
