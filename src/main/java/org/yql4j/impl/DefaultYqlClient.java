@@ -15,6 +15,7 @@ import oauth.signpost.exception.OAuthException;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -25,10 +26,16 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yql4j.ResultFormat;
 import org.yql4j.YqlClient;
 import org.yql4j.YqlException;
 import org.yql4j.YqlQuery;
 import org.yql4j.YqlResult;
+import org.yql4j.types.ErrorType;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
  * @author Philipp
@@ -43,7 +50,18 @@ public class DefaultYqlClient implements YqlClient {
 	protected static final String SERVICE_URL_OAUTH = 
 			"http://query.yahooapis.com/v1/yql";
 
-	protected CloseableHttpClient httpclient = HttpClients.createDefault();
+	protected CloseableHttpClient httpClient;
+	protected ObjectMapper jsonMapper;
+	protected ObjectMapper xmlMapper;
+
+	/**
+	 * Default constructor.
+	 */
+	public DefaultYqlClient() {
+		httpClient = createHttpClient();
+		jsonMapper = createJsonMapper();
+		xmlMapper = createXmlMapper();
+	}
 
 	/* (non-Javadoc)
 	 * @see org.yql4j.YqlClient#query(org.yql4j.YqlQuery)
@@ -54,7 +72,7 @@ public class DefaultYqlClient implements YqlClient {
 		try {
 			HttpUriRequest request = createHttpRequest(query);
 			request = signHttpRequest(request, query);
-			try (CloseableHttpResponse response = httpclient.execute(request)) {
+			try (CloseableHttpResponse response = httpClient.execute(request)) {
 				if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 					HttpEntity entity = response.getEntity();
 					Map<String, String> headers = new HashMap<>();
@@ -62,6 +80,13 @@ public class DefaultYqlClient implements YqlClient {
 						headers.put(header.getName(), header.getValue());
 					}
 					return new YqlResult(EntityUtils.toString(entity), headers);
+				} else if (isClientError(response)) {
+					HttpEntity entity = response.getEntity();
+					ObjectMapper mapper = getAppropriateMapper(query);
+					ErrorType error = mapper.readValue(
+							EntityUtils.toString(entity), ErrorType.class);
+					throw new YqlException("Failed to execute YQL query (URL=" + 
+							query.buildUri() + "): " + error.getDescription());
 				} else {
 					throw new YqlException("Failed to execute YQL query (URL=" + 
 							query.buildUri() + "): Received unexpected status code " + 
@@ -79,7 +104,21 @@ public class DefaultYqlClient implements YqlClient {
 	 */
 	@Override
 	public void close() throws IOException {
-		httpclient.close();
+		httpClient.close();
+	}
+
+	private CloseableHttpClient createHttpClient() {
+		return HttpClients.createDefault();
+	}
+
+	protected ObjectMapper createJsonMapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+		return mapper;
+	}
+
+	protected ObjectMapper createXmlMapper() {
+		return new XmlMapper();
 	}
 
 	protected HttpUriRequest createHttpRequest(YqlQuery query) {
@@ -98,5 +137,18 @@ public class DefaultYqlClient implements YqlClient {
 			consumer.sign(request);
 		}
 		return request;
+	}
+
+	protected boolean isClientError(HttpResponse response) {
+		int sc = response.getStatusLine().getStatusCode();
+		return sc >= 400 && sc < 500;
+	}
+
+	protected ObjectMapper getAppropriateMapper(YqlQuery query) {
+		ResultFormat format = query.getFormat();
+		if (ResultFormat.JSON.equals(format)) {
+			return jsonMapper;
+		}
+		return xmlMapper;
 	}
 }

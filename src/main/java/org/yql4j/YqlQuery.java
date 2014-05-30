@@ -4,7 +4,6 @@
 package org.yql4j;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.yql4j.ResultFormat.XML;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -34,7 +33,7 @@ public final class YqlQuery {
 	private String consumerSecret;
 	private boolean diagnostics;
 	private String environmentFile;
-	private ResultFormat format = XML;
+	private ResultFormat format;
 	private String queryString;
 
 	/**
