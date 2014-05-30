@@ -79,7 +79,8 @@ public class DefaultYqlClient implements YqlClient {
 					for (Header header : response.getAllHeaders()) {
 						headers.put(header.getName(), header.getValue());
 					}
-					return new YqlResult(EntityUtils.toString(entity), headers);
+					return new YqlResult(EntityUtils.toString(entity), 
+							headers, getAppropriateMapper(query));
 				} else if (isClientError(response)) {
 					HttpEntity entity = response.getEntity();
 					ObjectMapper mapper = getAppropriateMapper(query);
@@ -114,6 +115,7 @@ public class DefaultYqlClient implements YqlClient {
 	protected ObjectMapper createJsonMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 		return mapper;
 	}
 
