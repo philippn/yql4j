@@ -3,6 +3,8 @@
  */
 package org.yql4j.types;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 /**
@@ -13,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 public class QueryResultType<CT extends ResultCollectionType<?>> {
 
 	private int count;
-	private String created;
+	private Date created;
 	private String lang;
 	private DiagnosticsType diagnostics;
 	private CT results;
@@ -35,14 +37,14 @@ public class QueryResultType<CT extends ResultCollectionType<?>> {
 	/**
 	 * @return the created
 	 */
-	public String getCreated() {
+	public Date getCreated() {
 		return created;
 	}
 
 	/**
 	 * @param created the created to set
 	 */
-	public void setCreated(String created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
