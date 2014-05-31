@@ -115,7 +115,7 @@ public class DefaultYqlClient implements YqlClient {
 		httpClient.close();
 	}
 
-	private CloseableHttpClient createHttpClient() {
+	protected CloseableHttpClient createHttpClient() {
 		return HttpClients.createDefault();
 	}
 
