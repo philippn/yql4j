@@ -49,7 +49,15 @@ public class YqlClientTest {
 	}
 
 	@Test
-	public void testMappingQueryEmptyResultXml() throws Exception {
+	public void testQueryWithVariable() throws Exception {
+		YqlQuery query = new YqlQuery("select * from geo.oceans where name=@name");
+		query.setVariable("name", "Arctic Ocean");
+		YqlResult result = client.query(query);
+		assertTrue(result.getContentAsString().contains("Arctic Ocean"));
+	}
+
+	@Test
+	public void testObjectMappingEmptyResultXml() throws Exception {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Nordsee'");
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
@@ -59,40 +67,40 @@ public class YqlClientTest {
 	}
 
 	@Test
-	public void testMappingQuerySingleResultXml() throws Exception {
+	public void testObjectMappingSingleResultXml() throws Exception {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Atlantic Ocean'");
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType> results = 
+		QueryResultType<PlaceCollectionType> mappedResult = 
 				result.getContentAsMappedObject(
 						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
-		assertEquals(1, results.getCount());
-		assertNotNull(results.getResults());
-		PlaceType atlantic = results.getResults().getContent()[0];
+		assertEquals(1, mappedResult.getCount());
+		assertNotNull(mappedResult.getResults());
+		PlaceType atlantic = mappedResult.getResults().getContent()[0];
 		assertNotNull(atlantic);
 		assertEquals("Atlantic Ocean", atlantic.getName());
 	}
 
 	@Test
-	public void testMappingQueryMulipleResultsXml() throws Exception {
+	public void testObjectMappingMultiResultXml() throws Exception {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Atlantic Ocean' or name='Indian Ocean'");
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType> results = 
+		QueryResultType<PlaceCollectionType> mappedResult = 
 				result.getContentAsMappedObject(
 						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
-		assertEquals(2, results.getCount());
-		assertNotNull(results.getResults());
-		PlaceType atlantic = results.getResults().getContent()[0];
+		assertEquals(2, mappedResult.getCount());
+		assertNotNull(mappedResult.getResults());
+		PlaceType atlantic = mappedResult.getResults().getContent()[0];
 		assertNotNull(atlantic);
 		assertEquals("Atlantic Ocean", atlantic.getName());
-		PlaceType indian = results.getResults().getContent()[1];
+		PlaceType indian = mappedResult.getResults().getContent()[1];
 		assertNotNull(indian);
 		assertEquals("Indian Ocean", indian.getName());
 	}
 
 	@Test
-	public void testMappingQueryEmptyResultJson() throws Exception {
+	public void testObjectMappingEmptyResultJson() throws Exception {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Nordsee'");
 		query.setDiagnostics(true);
 		query.setFormat(ResultFormat.JSON);
@@ -103,36 +111,36 @@ public class YqlClientTest {
 	}
 
 	@Test
-	public void testMappingQuerySingleResultJson() throws Exception {
+	public void testObjectMappingSingleResultJson() throws Exception {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Atlantic Ocean'");
 		query.setDiagnostics(true);
 		query.setFormat(ResultFormat.JSON);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType> results = 
+		QueryResultType<PlaceCollectionType> mappedResult = 
 				result.getContentAsMappedObject(
 						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
-		assertEquals(1, results.getCount());
-		assertNotNull(results.getResults());
-		PlaceType atlantic = results.getResults().getContent()[0];
+		assertEquals(1, mappedResult.getCount());
+		assertNotNull(mappedResult.getResults());
+		PlaceType atlantic = mappedResult.getResults().getContent()[0];
 		assertNotNull(atlantic);
 		assertEquals("Atlantic Ocean", atlantic.getName());
 	}
 
 	@Test
-	public void testMappingQueryMulipleResultsJson() throws Exception {
+	public void testObjectMappingMultiResultJson() throws Exception {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Atlantic Ocean' or name='Indian Ocean'");
 		query.setDiagnostics(true);
 		query.setFormat(ResultFormat.JSON);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType> results = 
+		QueryResultType<PlaceCollectionType> mappedResult = 
 				result.getContentAsMappedObject(
 						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
-		assertEquals(2, results.getCount());
-		assertNotNull(results.getResults());
-		PlaceType atlantic = results.getResults().getContent()[0];
+		assertEquals(2, mappedResult.getCount());
+		assertNotNull(mappedResult.getResults());
+		PlaceType atlantic = mappedResult.getResults().getContent()[0];
 		assertNotNull(atlantic);
 		assertEquals("Atlantic Ocean", atlantic.getName());
-		PlaceType indian = results.getResults().getContent()[1];
+		PlaceType indian = mappedResult.getResults().getContent()[1];
 		assertNotNull(indian);
 		assertEquals("Indian Ocean", indian.getName());
 	}

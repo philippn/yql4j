@@ -4,9 +4,13 @@
 package org.yql4j;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
@@ -35,6 +39,7 @@ public final class YqlQuery {
 	private String environmentFile;
 	private ResultFormat format;
 	private String queryString;
+	private Map<String, String> variables = new HashMap<>();
 
 	/**
 	 * Constructor.
@@ -149,6 +154,18 @@ public final class YqlQuery {
 	}
 
 	/**
+	 * @param name
+	 * @param value
+	 */
+	public void setVariable(String name, String value) {
+		checkNotNull(name);
+		checkNotNull(value);
+		checkState(getQueryString().contains("@" + name), 
+				"Query string does not contain variable literal: @" + name);
+		variables.put(name, value);
+	}
+
+	/**
 	 * Returns the URI for this query.
 	 * @return the uri
 	 */
@@ -168,6 +185,10 @@ public final class YqlQuery {
 				builder.addParameter("format", getFormat().name().toLowerCase());
 			}
 			builder.addParameter("q", getQueryString());
+			
+			for (Entry<String, String> varDef : variables.entrySet()) {
+				builder.addParameter(varDef.getKey(), varDef.getValue());
+			}
 			
 			return builder.build();
 		} catch (URISyntaxException e) {
