@@ -4,13 +4,17 @@
 package org.yql4j;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableSet;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
@@ -29,51 +33,38 @@ public final class YqlQuery {
 	public static final String QUERY_URL_OAUTH = 
 			"http://query.yahooapis.com/v1/yql";
 
-	public static final String ENV_OPEN_DATA_TABLES = 
+	public static final String ENV_COMMUNITY_OPEN_DATA_TABLES = 
 			"store://datatables.org/alltableswithkeys";
 
-	private String apiKey;
 	private String consumerKey;
 	private String consumerSecret;
 	private boolean diagnostics;
-	private String environmentFile;
 	private ResultFormat format;
+	private List<String> environmentFiles = new ArrayList<>();
 	private String queryString;
+	private String aliasPrefix;
+	private String aliasName;
 	private Map<String, String> variables = new HashMap<>();
 
 	/**
-	 * Constructor.
+	 * Constructor for calling the specified query.
 	 * @param queryString the query to execute
 	 */
 	public YqlQuery(String queryString) {
-		this(queryString, false);
-	}
-
-	/**
-	 * Constructor.
-	 * @param queryString the query to execute
-	 * @param includeOpenDataTables whether to include Open Data Tables
-	 */
-	public YqlQuery(String queryString, boolean includeOpenDataTables) {
 		checkNotNull(queryString);
 		this.queryString = queryString;
-		if (includeOpenDataTables) {
-			this.environmentFile = ENV_OPEN_DATA_TABLES;
-		}
 	}
 
 	/**
-	 * @return the apiKey
+	 * Constructor for calling the specified YQL query alias.
+	 * @param aliasPrefix the prefix of the query alias
+	 * @param aliasName the name of query alias
 	 */
-	public String getApiKey() {
-		return apiKey;
-	}
-
-	/**
-	 * @param apiKey the apiKey to set
-	 */
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
+	public YqlQuery(String aliasPrefix, String aliasName) {
+		checkNotNull(aliasPrefix);
+		checkNotNull(aliasName);
+		this.aliasPrefix = aliasPrefix;
+		this.aliasName = aliasName;
 	}
 
 	/**
@@ -119,20 +110,6 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * @return the environmentFile
-	 */
-	public String getEnvironmentFile() {
-		return environmentFile;
-	}
-
-	/**
-	 * @param environmentFile the environmentFile to set
-	 */
-	public void setEnvironmentFile(String environmentFile) {
-		this.environmentFile = environmentFile;
-	}
-
-	/**
 	 * @return the format
 	 */
 	public ResultFormat getFormat() {
@@ -147,6 +124,36 @@ public final class YqlQuery {
 	}
 
 	/**
+	 * @return the environmentFiles
+	 */
+	public List<String> getEnvironmentFiles() {
+		return unmodifiableList(environmentFiles);
+	}
+
+	/**
+	 * @param environmentFile the environmentFile to add
+	 */
+	public void addEnvironmentFile(String environmentFile) {
+		checkNotNull(environmentFile);
+		environmentFiles.add(environmentFile);
+	}
+
+	/**
+	 * @param environmentFile the environmentFile to remove
+	 */
+	public void removeEnvironmentFile(String environmentFile) {
+		checkNotNull(environmentFile);
+		environmentFiles.remove(environmentFile);
+	}
+
+	/**
+	 * Adds the environment file for community Open Data tables.
+	 */
+	public void useCommunityOpenDataTables() {
+		addEnvironmentFile(ENV_COMMUNITY_OPEN_DATA_TABLES);
+	}
+
+	/**
 	 * @return the queryString
 	 */
 	public String getQueryString() {
@@ -154,38 +161,79 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * @param name
-	 * @param value
+	 * @return the aliasPrefix
 	 */
-	public void setVariable(String name, String value) {
+	public String getAliasPrefix() {
+		return aliasPrefix;
+	}
+
+	/**
+	 * @return the aliasName
+	 */
+	public String getAliasName() {
+		return aliasName;
+	}
+
+	/**
+	 * @return a set containing the names of all the variables defined
+	 */
+	public Set<String> getVariableNames() {
+		return unmodifiableSet(variables.keySet());
+	}
+
+	/**
+	 * @param name the name of the variable
+	 * @return the value or <code>null</code> if undefined
+	 */
+	public String getVariableValue(String name) {
+		checkNotNull(name);
+		return variables.get(name);
+	}
+
+	/**
+	 * @param name the name of the variable to add
+	 * @param value the value
+	 */
+	public void addVariable(String name, String value) {
 		checkNotNull(name);
 		checkNotNull(value);
-		checkState(getQueryString().contains("@" + name), 
-				"Query string does not contain variable literal: @" + name);
 		variables.put(name, value);
 	}
 
 	/**
+	 * @param name the name of the variable to remove
+	 */
+	public void removeVariable(String name) {
+		checkNotNull(name);
+		variables.remove(name);
+	}
+
+	/**
 	 * Returns the URI for this query.
-	 * @return the uri
+	 * @return the URI
 	 */
 	public URI buildUri() {
 		try {
-			boolean oAuth = (getConsumerKey() != null) && 
-					(getConsumerSecret() != null);
+			boolean oAuth = (consumerKey != null) && (consumerSecret != null);
+			boolean aliasQuery = queryString == null;
+			
 			String baseUri = oAuth ? QUERY_URL_OAUTH : QUERY_URL_PUBLIC;
+			if (aliasQuery) {
+				baseUri += "/" + aliasPrefix + "/" + aliasName;
+			}
 			URIBuilder builder = new URIBuilder(baseUri);
 			
 			// Set parameters
-			builder.addParameter("diagnostics", Boolean.toString(isDiagnostics()));
-			if (getEnvironmentFile() != null) {
-				builder.addParameter("env", getEnvironmentFile());
+			builder.addParameter("diagnostics", Boolean.toString(diagnostics));
+			for (String env : environmentFiles) {
+				builder.addParameter("env", env);
 			}
-			if (getFormat() != null) {
-				builder.addParameter("format", getFormat().name().toLowerCase());
+			if (format != null) {
+				builder.addParameter("format", format.name().toLowerCase());
 			}
-			builder.addParameter("q", getQueryString());
-			
+			if (!aliasQuery) {
+				builder.addParameter("q", queryString);
+			}
 			for (Entry<String, String> varDef : variables.entrySet()) {
 				builder.addParameter(varDef.getKey(), varDef.getValue());
 			}

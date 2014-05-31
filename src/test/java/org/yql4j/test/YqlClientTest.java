@@ -51,7 +51,15 @@ public class YqlClientTest {
 	@Test
 	public void testQueryWithVariable() throws Exception {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name=@name");
-		query.setVariable("name", "Arctic Ocean");
+		query.addVariable("name", "Arctic Ocean");
+		YqlResult result = client.query(query);
+		assertTrue(result.getContentAsString().contains("Arctic Ocean"));
+	}
+
+	@Test
+	public void testQueryAlias() throws Exception {
+		YqlQuery query = new YqlQuery("philippn", "ocean");
+		query.addVariable("name", "Arctic Ocean");
 		YqlResult result = client.query(query);
 		assertTrue(result.getContentAsString().contains("Arctic Ocean"));
 	}
@@ -147,7 +155,8 @@ public class YqlClientTest {
 
 	@Test
 	public void testOpenDataTablesQuery() throws Exception {
-		YqlQuery query = new YqlQuery("select * from yahoo.finance.stocks where symbol='ALV.DE'", true);
+		YqlQuery query = new YqlQuery("select * from yahoo.finance.stocks where symbol='ALV.DE'");
+		query.useCommunityOpenDataTables();
 		YqlResult result = client.query(query);
 		assertTrue(result.getContentAsString().contains("Insurance"));
 	}

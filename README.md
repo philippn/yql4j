@@ -11,7 +11,7 @@ Usage Example
 ```
 YqlClient client = new DefaultYqlClient();
 YqlQuery query = new YqlQuery("select * from geo.oceans where name=@name");
-query.setVariable("name", "Arctic Ocean");
+query.addVariable("name", "Arctic Ocean");
 YqlResult result = client.query(query);
 
 // Now you can do whatever you like with the raw result
@@ -32,7 +32,8 @@ Features
 --------
 - *YqlQuery* takes care of building the request URL for you
     - Built-in parameters *diagnostics*, *env* etc. are supported
-    - Support for YQL variable substitution 
+    - Support for YQL variable substitution
+    - Support for YQl query aliases
 - *YqlResult* supports mapping the content to an object graph
 - Support OAuth signed requests (may or may not be useful)
 
