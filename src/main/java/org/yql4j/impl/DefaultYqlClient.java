@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.exception.OAuthException;
@@ -36,6 +37,7 @@ import org.yql4j.types.ErrorType;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.google.common.base.Stopwatch;
 
 /**
  * @author Philipp
@@ -72,7 +74,12 @@ public class DefaultYqlClient implements YqlClient {
 		try {
 			HttpUriRequest request = createHttpRequest(query);
 			request = signHttpRequest(request, query);
+			
+			Stopwatch timer = Stopwatch.createStarted();
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
+				logger.debug("YQL query (URL=" + query.toUri() + ") took " + 
+						timer.stop().elapsed(TimeUnit.MILLISECONDS) + "ms");
+				
 				if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 					HttpEntity entity = response.getEntity();
 					Map<String, String> headers = new HashMap<>();
@@ -87,16 +94,16 @@ public class DefaultYqlClient implements YqlClient {
 					ErrorType error = mapper.readValue(
 							EntityUtils.toString(entity), ErrorType.class);
 					throw new YqlException("Failed to execute YQL query (URL=" + 
-							query.buildUri() + "): " + error.getDescription());
+							query.toUri() + "): " + error.getDescription());
 				} else {
 					throw new YqlException("Failed to execute YQL query (URL=" + 
-							query.buildUri() + "): Received unexpected status code " + 
+							query.toUri() + "): Received unexpected status code " + 
 							response.getStatusLine().getStatusCode());
 				}
 			}
 		} catch (ParseException | OAuthException | IOException e) {
 			throw new YqlException("Failed to execute YQL query (URL=" + 
-					query.buildUri() + "): " + e.getMessage(), e);
+					query.toUri() + "): " + e.getMessage(), e);
 		}
 	}
 
@@ -124,12 +131,13 @@ public class DefaultYqlClient implements YqlClient {
 	}
 
 	protected HttpUriRequest createHttpRequest(YqlQuery query) {
-		URI uri = query.buildUri();
-		logger.debug("YQL Request URL: " + uri.toString());
+		URI uri = query.toUri();
+		logger.debug("YQL query URL: " + uri.toString());
 		return new HttpGet(uri);
 	}
 
-	protected HttpUriRequest signHttpRequest(HttpUriRequest request, YqlQuery query) throws OAuthException {
+	protected HttpUriRequest signHttpRequest(HttpUriRequest request, 
+			YqlQuery query) throws OAuthException {
 		boolean oAuth = (query.getConsumerKey() != null) && 
 				(query.getConsumerSecret() != null);
 		if (oAuth) {

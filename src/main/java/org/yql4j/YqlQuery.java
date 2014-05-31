@@ -46,6 +46,8 @@ public final class YqlQuery {
 	private String aliasName;
 	private Map<String, String> variables = new HashMap<>();
 
+	private URI compiledUri;
+
 	/**
 	 * Constructor for calling the specified query.
 	 * @param queryString the query to execute
@@ -79,6 +81,7 @@ public final class YqlQuery {
 	 */
 	public void setConsumerKey(String consumerKey) {
 		this.consumerKey = consumerKey;
+		clearUri();
 	}
 
 	/**
@@ -93,6 +96,7 @@ public final class YqlQuery {
 	 */
 	public void setConsumerSecret(String consumerSecret) {
 		this.consumerSecret = consumerSecret;
+		clearUri();
 	}
 
 	/**
@@ -107,6 +111,7 @@ public final class YqlQuery {
 	 */
 	public void setDiagnostics(boolean diagnostics) {
 		this.diagnostics = diagnostics;
+		clearUri();
 	}
 
 	/**
@@ -121,6 +126,7 @@ public final class YqlQuery {
 	 */
 	public void setFormat(ResultFormat format) {
 		this.format = format;
+		clearUri();
 	}
 
 	/**
@@ -136,6 +142,7 @@ public final class YqlQuery {
 	public void addEnvironmentFile(String environmentFile) {
 		checkNotNull(environmentFile);
 		environmentFiles.add(environmentFile);
+		clearUri();
 	}
 
 	/**
@@ -144,6 +151,7 @@ public final class YqlQuery {
 	public void removeEnvironmentFile(String environmentFile) {
 		checkNotNull(environmentFile);
 		environmentFiles.remove(environmentFile);
+		clearUri();
 	}
 
 	/**
@@ -151,6 +159,7 @@ public final class YqlQuery {
 	 */
 	public void useCommunityOpenDataTables() {
 		addEnvironmentFile(ENV_COMMUNITY_OPEN_DATA_TABLES);
+		clearUri();
 	}
 
 	/**
@@ -198,6 +207,7 @@ public final class YqlQuery {
 		checkNotNull(name);
 		checkNotNull(value);
 		variables.put(name, value);
+		clearUri();
 	}
 
 	/**
@@ -206,13 +216,25 @@ public final class YqlQuery {
 	public void removeVariable(String name) {
 		checkNotNull(name);
 		variables.remove(name);
+		clearUri();
 	}
 
 	/**
 	 * Returns the URI for this query.
 	 * @return the URI
 	 */
-	public URI buildUri() {
+	public URI toUri() {
+		if (compiledUri == null) {
+			compiledUri = compileUri();
+		}
+		return compiledUri;
+	}
+
+	/**
+	 * Returns a newly built URI for this query.
+	 * @return the URI
+	 */
+	private URI compileUri() {
 		try {
 			boolean oAuth = (consumerKey != null) && (consumerSecret != null);
 			boolean aliasQuery = queryString == null;
@@ -245,11 +267,18 @@ public final class YqlQuery {
 		}
 	}
 
+	/**
+	 * Clears the buffered URI.
+	 */
+	private void clearUri() {
+		compiledUri = null;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "YqlQuery [" + buildUri() + "]";
+		return "YqlQuery [" + toUri() + "]";
 	}
 }
