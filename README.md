@@ -31,8 +31,8 @@ for (PlaceType item : mappedResult.getResults().getContent()) {
 Features
 --------
 - *YqlQuery* takes care of building the request URL for you
-- Built-in parameters *diagnostics*, *env* etc. are supported
-- Support for YQL variable substitution 
+    - Built-in parameters *diagnostics*, *env* etc. are supported
+    - Support for YQL variable substitution 
 - *YqlResult* supports mapping the content to an object graph
 - Support OAuth signed requests (may or may not be useful)
 
