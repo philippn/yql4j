@@ -10,7 +10,8 @@ Usage Example
 
 ```
 YqlClient client = new DefaultYqlClient();
-YqlQuery query = new YqlQuery("select * from geo.oceans");
+YqlQuery query = new YqlQuery("select * from geo.oceans where name=@name");
+query.setVariable("name", "Arctic Ocean");
 YqlResult result = client.query(query);
 
 // Now you can do whatever you like with the raw result
@@ -30,7 +31,8 @@ for (PlaceType item : mappedResult.getResults().getContent()) {
 Features
 --------
 - *YqlQuery* takes care of building the request URL for you
-- Parameters *diagnostics*, *env* etc. are supported
+- Built-in parameters *diagnostics*, *env* etc. are supported
+- Support for YQL variable substitution 
 - *YqlResult* supports mapping the content to an object graph
 - Support OAuth signed requests (may or may not be useful)
 
