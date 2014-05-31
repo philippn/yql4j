@@ -33,7 +33,7 @@ Features
 - *YqlQuery* takes care of building the request URL for you
     - Built-in parameters *diagnostics*, *env* etc. are supported
     - Support for YQL variable substitution
-    - Support for YQl query aliases
+    - Support for YQL query aliases
 - *YqlResult* supports mapping the content to an object graph
 - Support OAuth signed requests (may or may not be useful)
 
