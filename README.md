@@ -10,7 +10,9 @@ Usage Example
 
 ```
 YqlClient client = YqlClients.createDefault();
-YqlQuery query = YqlQueryBuilder.fromQueryString("select * from geo.oceans where name=@name").withVariable("name", "Arctic Ocean").build();
+YqlQuery query = YqlQueryBuilder
+				.fromQueryString("select * from geo.oceans where name=@name")
+				.withVariable("name", "Arctic Ocean").build();
 YqlResult result = client.query(query);
 
 // Now you can do whatever you like with the raw result
