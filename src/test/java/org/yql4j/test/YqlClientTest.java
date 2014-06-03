@@ -13,10 +13,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yql4j.ResultFormat;
 import org.yql4j.YqlClient;
+import org.yql4j.YqlClients;
 import org.yql4j.YqlException;
 import org.yql4j.YqlQuery;
 import org.yql4j.YqlResult;
-import org.yql4j.impl.DefaultYqlClient;
 import org.yql4j.test.types.PlaceCollectionType;
 import org.yql4j.test.types.PlaceType;
 import org.yql4j.types.QueryResultType;
@@ -33,7 +33,7 @@ public class YqlClientTest {
 
 	@Before
 	public void setUp() {
-		client = new DefaultYqlClient();
+		client = YqlClients.createDefault();
 	}
 
 	@After

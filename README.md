@@ -9,7 +9,7 @@ Usage Example
 -------------
 
 ```
-YqlClient client = new DefaultYqlClient();
+YqlClient client = YqlClients.createDefault();
 YqlQuery query = new YqlQuery("select * from geo.oceans where name=@name");
 query.addVariable("name", "Arctic Ocean");
 YqlResult result = client.query(query);

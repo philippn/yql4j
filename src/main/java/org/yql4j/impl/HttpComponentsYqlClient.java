@@ -43,9 +43,9 @@ import com.google.common.base.Stopwatch;
  * @author Philipp
  *
  */
-public class DefaultYqlClient implements YqlClient {
+public class HttpComponentsYqlClient implements YqlClient {
 
-	protected final Logger logger = LoggerFactory.getLogger(DefaultYqlClient.class);
+	protected final Logger logger = LoggerFactory.getLogger(HttpComponentsYqlClient.class);
 
 	protected static final String SERVICE_URL_PUBLIC = 
 			"http://query.yahooapis.com/v1/public/yql";
@@ -59,10 +59,19 @@ public class DefaultYqlClient implements YqlClient {
 	/**
 	 * Default constructor.
 	 */
-	public DefaultYqlClient() {
-		httpClient = createHttpClient();
-		jsonMapper = createJsonMapper();
-		xmlMapper = createXmlMapper();
+	public HttpComponentsYqlClient() {
+		this(HttpClients.createDefault());
+	}
+
+	/**
+	 * Default constructor.
+	 * @param httpClient the httpclient instance to use
+	 */
+	public HttpComponentsYqlClient(CloseableHttpClient httpClient) {
+		checkNotNull(httpClient);
+		this.httpClient = httpClient;
+		this.jsonMapper = createJsonMapper();
+		this.xmlMapper = createXmlMapper();
 	}
 
 	/* (non-Javadoc)
@@ -113,10 +122,6 @@ public class DefaultYqlClient implements YqlClient {
 	@Override
 	public void close() throws IOException {
 		httpClient.close();
-	}
-
-	protected CloseableHttpClient createHttpClient() {
-		return HttpClients.createDefault();
 	}
 
 	protected ObjectMapper createJsonMapper() {
