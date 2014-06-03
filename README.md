@@ -1,7 +1,8 @@
 About
 =====
 
-This repository contains a simple client library that can be used to query the Yahoo Query Language (YQL) web service.
+This repository contains a simple client library that can be used to query 
+the Yahoo Query Language (YQL) web service.
 
 For more information on YQL, please refer to: https://developer.yahoo.com/yql/
 
