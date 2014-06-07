@@ -52,8 +52,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.base.Stopwatch;
 
 /**
- * @author Philipp
- *
+ * This class implements the {@link YqlClient} contract using the <a
+ * href="http://hc.apache.org/httpcomponents-client-ga/">Apache
+ * HttpComponents HttpClient</a> for transport.
  */
 public class HttpComponentsYqlClient implements YqlClient {
 

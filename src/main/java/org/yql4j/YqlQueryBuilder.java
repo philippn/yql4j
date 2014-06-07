@@ -146,8 +146,7 @@ public class YqlQueryBuilder {
 	 * @return the builder
 	 */
 	public YqlQueryBuilder withCommunityOpenDataTables() {
-		environmentFiles.add(ENV_COMMUNITY_OPEN_DATA_TABLES);
-		return this;
+		return withEnvironmentFile(ENV_COMMUNITY_OPEN_DATA_TABLES);
 	}
 
 	/**
