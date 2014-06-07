@@ -1,5 +1,0 @@
-YQL4J
-Copyright (C) 2014 Philipp Nanz
-
-This product includes software developed at
-The Apache Software Foundation (http://www.apache.org/).
