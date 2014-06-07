@@ -18,8 +18,8 @@ package org.yql4j.test.types;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 /**
- * @author Philipp
- *
+ * This class represents the <code>placeTypeName</code> type used in the
+ * <code>geo.*</code> tables.
  */
 public class PlaceTypeNameType {
 

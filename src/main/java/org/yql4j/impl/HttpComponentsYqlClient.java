@@ -57,7 +57,8 @@ import com.google.common.base.Stopwatch;
  */
 public class HttpComponentsYqlClient implements YqlClient {
 
-	protected final Logger logger = LoggerFactory.getLogger(HttpComponentsYqlClient.class);
+	protected final Logger logger = LoggerFactory
+			.getLogger(HttpComponentsYqlClient.class);
 
 	protected static final String SERVICE_URL_PUBLIC = 
 			"http://query.yahooapis.com/v1/public/yql";
@@ -76,8 +77,10 @@ public class HttpComponentsYqlClient implements YqlClient {
 	}
 
 	/**
-	 * Default constructor.
-	 * @param httpClient the httpclient instance to use
+	 * Constructor.
+	 * 
+	 * @param httpClient
+	 *            the {@link CloseableHttpClient} instance to use
 	 */
 	public HttpComponentsYqlClient(CloseableHttpClient httpClient) {
 		checkNotNull(httpClient);
@@ -86,7 +89,9 @@ public class HttpComponentsYqlClient implements YqlClient {
 		this.xmlMapper = createXmlMapper();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.yql4j.YqlClient#query(org.yql4j.YqlQuery)
 	 */
 	@Override
@@ -95,40 +100,43 @@ public class HttpComponentsYqlClient implements YqlClient {
 		try {
 			HttpUriRequest request = createHttpRequest(query);
 			request = signHttpRequest(request, query);
-			
+
 			Stopwatch timer = Stopwatch.createStarted();
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
-				logger.debug("YQL query (URL=" + query.toUri() + ") took " + 
-						timer.stop().elapsed(TimeUnit.MILLISECONDS) + "ms");
-				
+				logger.debug("YQL query (URL=" + query.toUri() + ") took "
+						+ timer.stop().elapsed(TimeUnit.MILLISECONDS) + "ms");
+
 				if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 					HttpEntity entity = response.getEntity();
 					Map<String, String> headers = new HashMap<>();
 					for (Header header : response.getAllHeaders()) {
 						headers.put(header.getName(), header.getValue());
 					}
-					return new YqlResult(EntityUtils.toString(entity), 
-							headers, getAppropriateMapper(query));
+					return new YqlResult(EntityUtils.toString(entity), headers,
+							getAppropriateMapper(query));
 				} else if (isClientError(response)) {
 					HttpEntity entity = response.getEntity();
 					ObjectMapper mapper = getAppropriateMapper(query);
 					ErrorType error = mapper.readValue(
 							EntityUtils.toString(entity), ErrorType.class);
-					throw new YqlException("Failed to execute YQL query (URL=" + 
-							query.toUri() + "): " + error.getDescription());
+					throw new YqlException("Failed to execute YQL query (URL="
+							+ query.toUri() + "): " + error.getDescription());
 				} else {
-					throw new YqlException("Failed to execute YQL query (URL=" + 
-							query.toUri() + "): Received unexpected status code " + 
-							response.getStatusLine().getStatusCode());
+					throw new YqlException("Failed to execute YQL query (URL="
+							+ query.toUri()
+							+ "): Received unexpected status code "
+							+ response.getStatusLine().getStatusCode());
 				}
 			}
 		} catch (ParseException | OAuthException | IOException e) {
-			throw new YqlException("Failed to execute YQL query (URL=" + 
-					query.toUri() + "): " + e.getMessage(), e);
+			throw new YqlException("Failed to execute YQL query (URL="
+					+ query.toUri() + "): " + e.getMessage(), e);
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.io.Closeable#close()
 	 */
 	@Override
@@ -136,6 +144,14 @@ public class HttpComponentsYqlClient implements YqlClient {
 		httpClient.close();
 	}
 
+	/**
+	 * Creates the Jackson {@link ObjectMapper} instance to use for XML
+	 * processing.
+	 * <p/>
+	 * Applies only if <code>format=json</code>.
+	 * 
+	 * @return a Jackson {@link ObjectMapper} instance
+	 */
 	protected ObjectMapper createJsonMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
@@ -143,20 +159,46 @@ public class HttpComponentsYqlClient implements YqlClient {
 		return mapper;
 	}
 
+	/**
+	 * Creates the Jackson {@link ObjectMapper} instance to use for XML
+	 * processing.
+	 * <p/>
+	 * Applies only if <code>format=xml</code>.
+	 * 
+	 * @return a Jackson {@link ObjectMapper} instance
+	 */
 	protected ObjectMapper createXmlMapper() {
 		return new XmlMapper();
 	}
 
+	/**
+	 * Create the HTTP request to execute.
+	 * 
+	 * @param query
+	 *            the query specification
+	 * @return the HTTP request
+	 */
 	protected HttpUriRequest createHttpRequest(YqlQuery query) {
 		URI uri = query.toUri();
 		logger.debug("YQL query URL: " + uri.toString());
 		return new HttpGet(uri);
 	}
 
-	protected HttpUriRequest signHttpRequest(HttpUriRequest request, 
+	/**
+	 * Signs the HTTP request using OAuth.
+	 * 
+	 * @param request
+	 *            the HTTP request
+	 * @param query
+	 *            the query specification
+	 * @return the signed HTTP request
+	 * @throws OAuthException
+	 *             if an error occurred
+	 */
+	protected HttpUriRequest signHttpRequest(HttpUriRequest request,
 			YqlQuery query) throws OAuthException {
-		boolean oAuth = (query.getConsumerKey() != null) && 
-				(query.getConsumerSecret() != null);
+		boolean oAuth = (query.getConsumerKey() != null)
+				&& (query.getConsumerSecret() != null);
 		if (oAuth) {
 			// We are only signing the request at this point
 			CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(
@@ -166,11 +208,26 @@ public class HttpComponentsYqlClient implements YqlClient {
 		return request;
 	}
 
+	/**
+	 * Returns whether the HTTP response is in an error state caused by the
+	 * client.
+	 * 
+	 * @param response
+	 *            the HTTP response
+	 * @return <code>true</code> if response is in error caused by the client
+	 */
 	protected boolean isClientError(HttpResponse response) {
 		int sc = response.getStatusLine().getStatusCode();
 		return sc >= 400 && sc < 500;
 	}
 
+	/**
+	 * Returns the {@link ObjectMapper} appropriate for the given query.
+	 * 
+	 * @param query
+	 *            the query specification
+	 * @return the appropriate Jackson {@link ObjectMapper}
+	 */
 	protected ObjectMapper getAppropriateMapper(YqlQuery query) {
 		ResultFormat format = query.getFormat();
 		if (ResultFormat.JSON.equals(format)) {

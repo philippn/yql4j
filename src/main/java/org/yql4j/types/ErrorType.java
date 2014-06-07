@@ -19,8 +19,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 
 /**
- * @author Philipp
- *
+ * This class represents the <code>error</code> type used in the YQL result
+ * envelope.
  */
 @JsonRootName(value="error")
 public class ErrorType {

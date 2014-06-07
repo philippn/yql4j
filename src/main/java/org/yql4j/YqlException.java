@@ -16,8 +16,7 @@
 package org.yql4j;
 
 /**
- * @author Philipp
- *
+ * Signals an error in the YQL query execution.
  */
 public class YqlException extends Exception {
 
@@ -25,15 +24,21 @@ public class YqlException extends Exception {
 
 	/**
 	 * Constructor.
+	 * 
 	 * @param message
+	 *            the error message
 	 */
 	public YqlException(String message) {
 		super(message);
 	}
 
 	/**
+	 * Constructor.
+	 * 
 	 * @param message
+	 *            the error message
 	 * @param cause
+	 *            the cause
 	 */
 	public YqlException(String message, Throwable cause) {
 		super(message, cause);

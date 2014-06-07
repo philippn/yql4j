@@ -36,8 +36,7 @@ import org.yql4j.types.QueryResultType;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
- * @author Philipp
- *
+ * Tests for the {@link YqlClient}.
  */
 public class YqlClientTest {
 

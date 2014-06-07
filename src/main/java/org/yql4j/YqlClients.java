@@ -41,6 +41,8 @@ public class YqlClients {
 	 * Returns a newly constructed {@link YqlClient} instance backed by the
 	 * given preconfigured {@link CloseableHttpClient}.
 	 * 
+	 * @param httpClient
+	 *            the {@link CloseableHttpClient} instance to use
 	 * @return the client
 	 */
 	public static YqlClient createWithHttpClient(CloseableHttpClient httpClient) {

@@ -20,10 +20,9 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 /**
- * @author Philipp
- *
+ * This class represents the root of the YQL result envelope.
  */
-@JsonRootName(value="query")
+@JsonRootName(value = "query")
 public class QueryResultType<CT extends ResultCollectionType<?>> {
 
 	private int count;
@@ -40,7 +39,8 @@ public class QueryResultType<CT extends ResultCollectionType<?>> {
 	}
 
 	/**
-	 * @param count the count to set
+	 * @param count
+	 *            the count to set
 	 */
 	public void setCount(int count) {
 		this.count = count;
@@ -54,7 +54,8 @@ public class QueryResultType<CT extends ResultCollectionType<?>> {
 	}
 
 	/**
-	 * @param created the created to set
+	 * @param created
+	 *            the created to set
 	 */
 	public void setCreated(Date created) {
 		this.created = created;
@@ -68,7 +69,8 @@ public class QueryResultType<CT extends ResultCollectionType<?>> {
 	}
 
 	/**
-	 * @param lang the lang to set
+	 * @param lang
+	 *            the lang to set
 	 */
 	public void setLang(String lang) {
 		this.lang = lang;
@@ -82,7 +84,8 @@ public class QueryResultType<CT extends ResultCollectionType<?>> {
 	}
 
 	/**
-	 * @param diagnostics the diagnostics to set
+	 * @param diagnostics
+	 *            the diagnostics to set
 	 */
 	public void setDiagnostics(DiagnosticsType diagnostics) {
 		this.diagnostics = diagnostics;
@@ -96,7 +99,8 @@ public class QueryResultType<CT extends ResultCollectionType<?>> {
 	}
 
 	/**
-	 * @param results the results to set
+	 * @param results
+	 *            the results to set
 	 */
 	public void setResults(CT results) {
 		this.results = results;

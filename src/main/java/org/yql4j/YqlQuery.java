@@ -33,8 +33,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Philipp
- *
+ * Instances of this class represent a concrete YQL query that can be executed
+ * repeatedly.
+ * 
+ * It is recommended to obtain instances using the {@link YqlQueryBuilder}
+ * rather than constructing them directly.
+ * 
+ * @see YqlQueryBuilder
  */
 public final class YqlQuery {
 
@@ -62,7 +67,9 @@ public final class YqlQuery {
 
 	/**
 	 * Constructor for calling the specified query.
-	 * @param queryString the query to execute
+	 * 
+	 * @param queryString
+	 *            the query to execute
 	 */
 	public YqlQuery(String queryString) {
 		checkNotNull(queryString);
@@ -71,8 +78,11 @@ public final class YqlQuery {
 
 	/**
 	 * Constructor for calling the specified YQL query alias.
-	 * @param aliasPrefix the prefix of the query alias
-	 * @param aliasName the name of query alias
+	 * 
+	 * @param aliasPrefix
+	 *            the prefix of the query alias
+	 * @param aliasName
+	 *            the name of query alias
 	 */
 	public YqlQuery(String aliasPrefix, String aliasName) {
 		checkNotNull(aliasPrefix);
@@ -89,7 +99,8 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * @param consumerKey the consumerKey to set
+	 * @param consumerKey
+	 *            the consumerKey to set
 	 */
 	public void setConsumerKey(String consumerKey) {
 		this.consumerKey = consumerKey;
@@ -104,7 +115,8 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * @param consumerSecret the consumerSecret to set
+	 * @param consumerSecret
+	 *            the consumerSecret to set
 	 */
 	public void setConsumerSecret(String consumerSecret) {
 		this.consumerSecret = consumerSecret;
@@ -119,7 +131,8 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * @param diagnostics the diagnostics to set
+	 * @param diagnostics
+	 *            the diagnostics to set
 	 */
 	public void setDiagnostics(boolean diagnostics) {
 		this.diagnostics = diagnostics;
@@ -134,7 +147,8 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * @param format the format to set
+	 * @param format
+	 *            the format to set
 	 */
 	public void setFormat(ResultFormat format) {
 		this.format = format;
@@ -149,7 +163,8 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * @param environmentFile the environmentFile to add
+	 * @param environmentFile
+	 *            the environmentFile to add
 	 */
 	public void addEnvironmentFile(String environmentFile) {
 		checkNotNull(environmentFile);
@@ -158,7 +173,8 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * @param environmentFile the environmentFile to remove
+	 * @param environmentFile
+	 *            the environmentFile to remove
 	 */
 	public void removeEnvironmentFile(String environmentFile) {
 		checkNotNull(environmentFile);
@@ -203,7 +219,8 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * @param name the name of the variable
+	 * @param name
+	 *            the name of the variable
 	 * @return the value or <code>null</code> if undefined
 	 */
 	public String getVariableValue(String name) {
@@ -212,8 +229,10 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * @param name the name of the variable to add
-	 * @param value the value
+	 * @param name
+	 *            the name of the variable to add
+	 * @param value
+	 *            the value
 	 */
 	public void addVariable(String name, String value) {
 		checkNotNull(name);
@@ -223,7 +242,8 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * @param name the name of the variable to remove
+	 * @param name
+	 *            the name of the variable to remove
 	 */
 	public void removeVariable(String name) {
 		checkNotNull(name);
@@ -233,6 +253,7 @@ public final class YqlQuery {
 
 	/**
 	 * Returns the URI for this query.
+	 * 
 	 * @return the URI
 	 */
 	public URI toUri() {
@@ -243,20 +264,21 @@ public final class YqlQuery {
 	}
 
 	/**
-	 * Returns a newly built URI for this query.
+	 * Returns a newly constructed URI for this query.
+	 * 
 	 * @return the URI
 	 */
 	private URI compileUri() {
 		try {
 			boolean oAuth = (consumerKey != null) && (consumerSecret != null);
 			boolean aliasQuery = queryString == null;
-			
+
 			String baseUri = oAuth ? QUERY_URL_OAUTH : QUERY_URL_PUBLIC;
 			if (aliasQuery) {
 				baseUri += "/" + aliasPrefix + "/" + aliasName;
 			}
 			URIBuilder builder = new URIBuilder(baseUri);
-			
+
 			// Set parameters
 			builder.addParameter("diagnostics", Boolean.toString(diagnostics));
 			for (String env : environmentFiles) {
@@ -271,7 +293,7 @@ public final class YqlQuery {
 			for (Entry<String, String> varDef : variables.entrySet()) {
 				builder.addParameter(varDef.getKey(), varDef.getValue());
 			}
-			
+
 			return builder.build();
 		} catch (URISyntaxException e) {
 			logger.error(e.getMessage(), e);
@@ -286,7 +308,9 @@ public final class YqlQuery {
 		compiledUri = null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

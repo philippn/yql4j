@@ -16,8 +16,8 @@
 package org.yql4j.test.types;
 
 /**
- * @author Philipp
- *
+ * This class represents the <code>place</code> type used in the
+ * <code>geo.*</code> tables.
  */
 public class PlaceType {
 
@@ -35,7 +35,8 @@ public class PlaceType {
 	}
 
 	/**
-	 * @param lang the lang to set
+	 * @param lang
+	 *            the lang to set
 	 */
 	public void setLang(String lang) {
 		this.lang = lang;
@@ -49,7 +50,8 @@ public class PlaceType {
 	}
 
 	/**
-	 * @param uri the uri to set
+	 * @param uri
+	 *            the uri to set
 	 */
 	public void setUri(String uri) {
 		this.uri = uri;
@@ -63,7 +65,8 @@ public class PlaceType {
 	}
 
 	/**
-	 * @param woeid the woeid to set
+	 * @param woeid
+	 *            the woeid to set
 	 */
 	public void setWoeid(String woeid) {
 		this.woeid = woeid;
@@ -77,7 +80,8 @@ public class PlaceType {
 	}
 
 	/**
-	 * @param placeType the placeType to set
+	 * @param placeType
+	 *            the placeType to set
 	 */
 	public void setPlaceTypename(PlaceTypeNameType placeType) {
 		this.placeTypeName = placeType;
@@ -91,7 +95,8 @@ public class PlaceType {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;

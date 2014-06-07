@@ -28,8 +28,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * @author Philipp
- *
+ * Instances of this class contain the result of a YQL query execution.
  */
 public final class YqlResult {
 
@@ -39,11 +38,15 @@ public final class YqlResult {
 
 	/**
 	 * Constructor.
-	 * @param content the content as <code>String</code>
-	 * @param headers the headers returned
-	 * @param objectMapper the object mapper to use
+	 * 
+	 * @param content
+	 *            the content as <code>String</code>
+	 * @param headers
+	 *            the headers returned
+	 * @param objectMapper
+	 *            the object mapper to use
 	 */
-	public YqlResult(String content, Map<String, String> headers, 
+	public YqlResult(String content, Map<String, String> headers,
 			ObjectMapper objectMapper) {
 		checkNotNull(content);
 		checkNotNull(headers);
@@ -68,16 +71,23 @@ public final class YqlResult {
 	}
 
 	/**
-	 * @return the content as <code>String</code>
+	 * Returns the content as raw {@link String}.
+	 * 
+	 * @return the content as {@link String}
 	 */
 	public String getContentAsString() {
 		return content;
 	}
 
 	/**
+	 * Returns the content mapped into an object graph as requested per
+	 * <code>valueTypeRef</code>
+	 * 
 	 * @param valueTypeRef
+	 *            the type to request
 	 * @return the content as mapped object graph
 	 * @throws IOException
+	 *             if an error occurred
 	 */
 	public <CT extends ResultCollectionType<?>> QueryResultType<CT> getContentAsMappedObject(
 			TypeReference<QueryResultType<CT>> valueTypeRef) throws IOException {

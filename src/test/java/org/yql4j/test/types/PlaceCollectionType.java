@@ -20,12 +20,12 @@ import org.yql4j.types.ResultCollectionType;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
 /**
- * @author Philipp
- *
+ * This class represents a result collection <code>place</code> types used in
+ * the <code>geo.*</code> tables.
  */
 public class PlaceCollectionType extends ResultCollectionType<PlaceType> {
 
-	@JacksonXmlElementWrapper(useWrapping=false)
+	@JacksonXmlElementWrapper(useWrapping = false)
 	private PlaceType[] place;
 
 	/**
@@ -36,13 +36,16 @@ public class PlaceCollectionType extends ResultCollectionType<PlaceType> {
 	}
 
 	/**
-	 * @param place the place to set
+	 * @param place
+	 *            the place to set
 	 */
 	public void setPlace(PlaceType[] place) {
 		this.place = place;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.yql4j.types.ResultCollectionType#getContent()
 	 */
 	@Override

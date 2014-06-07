@@ -19,8 +19,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 /**
- * @author Philipp
- *
+ * This class represents the <code>url</code> type used in the YQL result
+ * envelope.
  */
 public class UrlType {
 
@@ -37,7 +37,8 @@ public class UrlType {
 	}
 
 	/**
-	 * @param executionStartTime the executionStartTime to set
+	 * @param executionStartTime
+	 *            the executionStartTime to set
 	 */
 	@JsonProperty("execution-start-time")
 	public void setExecutionStartTime(long executionStartTime) {
@@ -52,7 +53,8 @@ public class UrlType {
 	}
 
 	/**
-	 * @param executionStopTime the executionStopTime to set
+	 * @param executionStopTime
+	 *            the executionStopTime to set
 	 */
 	@JsonProperty("execution-stop-time")
 	public void setExecutionStopTime(long executionStopTime) {
@@ -67,7 +69,8 @@ public class UrlType {
 	}
 
 	/**
-	 * @param executionTime the executionTime to set
+	 * @param executionTime
+	 *            the executionTime to set
 	 */
 	@JsonProperty("execution-time")
 	public void setExecutionTime(long executionTime) {
@@ -82,7 +85,8 @@ public class UrlType {
 	}
 
 	/**
-	 * @param content the content to set
+	 * @param content
+	 *            the content to set
 	 */
 	@JacksonXmlText
 	public void setContent(String content) {

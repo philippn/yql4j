@@ -18,8 +18,8 @@ package org.yql4j.types;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * @author Philipp
- *
+ * This class represents the <code>diagnostics</code> type used in the YQL
+ * result envelope.
  */
 public class DiagnosticsType {
 
@@ -37,7 +37,8 @@ public class DiagnosticsType {
 	}
 
 	/**
-	 * @param publiclyCallable the publiclyCallable to set
+	 * @param publiclyCallable
+	 *            the publiclyCallable to set
 	 */
 	public void setPubliclyCallable(boolean publiclyCallable) {
 		this.publiclyCallable = publiclyCallable;
@@ -51,7 +52,8 @@ public class DiagnosticsType {
 	}
 
 	/**
-	 * @param url the url to set
+	 * @param url
+	 *            the url to set
 	 */
 	public void setUrl(UrlType url) {
 		this.url = url;
@@ -65,7 +67,8 @@ public class DiagnosticsType {
 	}
 
 	/**
-	 * @param userTime the userTime to set
+	 * @param userTime
+	 *            the userTime to set
 	 */
 	@JsonProperty("user-time")
 	public void setUserTime(long userTime) {
@@ -80,7 +83,8 @@ public class DiagnosticsType {
 	}
 
 	/**
-	 * @param serviceTime the serviceTime to set
+	 * @param serviceTime
+	 *            the serviceTime to set
 	 */
 	@JsonProperty("service-time")
 	public void setServiceTime(long serviceTime) {
@@ -95,7 +99,8 @@ public class DiagnosticsType {
 	}
 
 	/**
-	 * @param buildVersion the buildVersion to set
+	 * @param buildVersion
+	 *            the buildVersion to set
 	 */
 	@JsonProperty("build-version")
 	public void setBuildVersion(String buildVersion) {

@@ -17,8 +17,7 @@ package org.yql4j.types;
 
 
 /**
- * @author Philipp
- *
+ * This class acts as the base for custom YQL result collections.
  */
 public abstract class ResultCollectionType<VT> {
 
