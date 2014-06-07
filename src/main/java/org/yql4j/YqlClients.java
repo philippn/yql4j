@@ -20,8 +20,6 @@ import org.yql4j.impl.HttpComponentsYqlClient;
 
 /**
  * Factory methods for {@link YqlClient} instances.
- * 
- * @author Philipp
  */
 public class YqlClients {
 

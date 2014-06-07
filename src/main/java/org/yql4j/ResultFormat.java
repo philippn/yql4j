@@ -20,6 +20,6 @@ package org.yql4j;
  */
 public enum ResultFormat {
 
-	XML,
+	XML, 
 	JSON
 }
