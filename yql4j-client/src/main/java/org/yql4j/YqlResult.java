@@ -85,6 +85,8 @@ public final class YqlResult {
 	 * 
 	 * @param valueTypeRef
 	 *            the type to request
+	 * @param <CT>
+	 *            the result collection type
 	 * @return the content as mapped object graph
 	 * @throws IOException
 	 *             if an error occurred

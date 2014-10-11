@@ -166,7 +166,7 @@ public class YqlQueryBuilder {
 	}
 
 	/**
-	 * Returns a newly constructed {@link YqlQuery) instance.
+	 * Returns a newly constructed {@link YqlQuery} instance.
 	 * @return the query
 	 */
 	public YqlQuery build() {

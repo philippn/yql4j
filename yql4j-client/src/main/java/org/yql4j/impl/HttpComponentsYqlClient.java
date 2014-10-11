@@ -148,7 +148,7 @@ public class HttpComponentsYqlClient implements YqlClient {
 	/**
 	 * Creates the Jackson {@link ObjectMapper} instance to use for XML
 	 * processing.
-	 * <p/>
+	 * <p>
 	 * Applies only if <code>format=json</code>.
 	 * 
 	 * @return a Jackson {@link ObjectMapper} instance
@@ -163,7 +163,7 @@ public class HttpComponentsYqlClient implements YqlClient {
 	/**
 	 * Creates the Jackson {@link ObjectMapper} instance to use for XML
 	 * processing.
-	 * <p/>
+	 * <p>
 	 * Applies only if <code>format=xml</code>.
 	 * 
 	 * @return a Jackson {@link ObjectMapper} instance
