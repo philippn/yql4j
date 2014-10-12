@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>org.yql4j</groupId>
 	<artifactId>yql4j-parent</artifactId>
-	<version>0.9.0</version>
+	<version>0.9.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>YQL4J Parent</name>
 	<description>A YQL client library for Java</description>
