@@ -28,9 +28,9 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:git@github.com:philippn/yql4j.git</connection>
-		<developerConnection>scm:git:git@github.com:philippn/yql4j.git</developerConnection>
-		<url>git@github.com:philippn/yql4j.git</url>
+		<connection>scm:git:ssh://github.com/yql4j.git</connection>
+		<developerConnection>scm:git:ssh://github.com/philippn/yql4j.git</developerConnection>
+		<url>https://github.com/philippn/yql4j</url>
 	</scm>
 
 	<modules>
