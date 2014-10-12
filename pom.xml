@@ -94,6 +94,11 @@
 						<target>1.7</target>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-scm-plugin</artifactId>
+					<version>1.9.2</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
