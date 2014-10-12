@@ -28,8 +28,8 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:https://github.com/philippn/yql4j.git</connection>
-		<developerConnection>scm:git:https://github.com/philippn/yql4j.git</developerConnection>
+		<connection>scm:git:git@github.com:philippn/yql4j.git</connection>
+		<developerConnection>scm:git:git@github.com:philippn/yql4j.git</developerConnection>
 		<url>https://github.com/philippn/yql4j</url>
 	</scm>
 
