@@ -44,3 +44,15 @@ What's missing
 - Streaming support
 - OAuth authentication (two-legged and three-legged)
 
+Download
+--------
+The recommended way to get started using YQL4J in your project is 
+by using the following Maven coordinates:
+
+```
+<dependency>
+    <groupId>org.yql4j</groupId>
+    <artifactId>yql4j-client</artifactId>
+    <version>0.9.0</version>
+</dependency>
+```
