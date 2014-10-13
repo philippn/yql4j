@@ -9,7 +9,7 @@ For more information on YQL, please refer to: https://developer.yahoo.com/yql/
 Usage Example
 -------------
 
-```
+```java
 YqlClient client = YqlClients.createDefault();
 YqlQuery query = YqlQueryBuilder
 				.fromQueryString("select * from geo.oceans where name=@name")
@@ -49,7 +49,7 @@ Download
 The recommended way to get started using YQL4J in your project is 
 by using the following Maven coordinates:
 
-```
+```xml
 <dependency>
     <groupId>org.yql4j</groupId>
     <artifactId>yql4j-client</artifactId>
