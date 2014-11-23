@@ -17,6 +17,8 @@ package org.yql4j;
 
 import java.io.Closeable;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * This interface represents the basic contract for a YQL client.
  */
@@ -32,4 +34,20 @@ public interface YqlClient extends Closeable {
 	 *             if an error occurred
 	 */
 	public YqlResult query(YqlQuery query) throws YqlException;
+
+	/**
+	 * Returns the Jackson <code>ObjectMapper</code> used internally to map 
+	 * JSON results into an object graph.
+	 * 
+	 * @return the Jackson <code>ObjectMapper</code>
+	 */
+	public ObjectMapper getJsonObjectMapper();
+
+	/**
+	 * Returns the Jackson <code>ObjectMapper</code> used internally to map 
+	 * XML results into an object graph.
+	 * 
+	 * @return the Jackson <code>ObjectMapper</code>
+	 */
+	public ObjectMapper getXmlObjectMapper();
 }

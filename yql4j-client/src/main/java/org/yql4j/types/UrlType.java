@@ -19,8 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 /**
- * This class represents the <code>url</code> type used in the YQL result
- * envelope.
+ * This class represents the <code>url</code> type used in the YQL diagnostics.
  */
 public class UrlType {
 

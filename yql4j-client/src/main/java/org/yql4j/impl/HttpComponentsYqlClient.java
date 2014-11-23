@@ -90,6 +90,26 @@ public class HttpComponentsYqlClient implements YqlClient {
 		this.xmlMapper = createXmlMapper();
 	}
 
+	/* 
+	 * (non-Javadoc)
+	 * 
+	 * @see org.yql4j.YqlClient#getJsonObjectMapper()
+	 */
+	@Override
+	public ObjectMapper getJsonObjectMapper() {
+		return jsonMapper;
+	}
+
+	/* 
+	 * (non-Javadoc)
+	 * 
+	 * @see org.yql4j.YqlClient#getXmlObjectMapper()
+	 */
+	@Override
+	public ObjectMapper getXmlObjectMapper() {
+		return xmlMapper;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

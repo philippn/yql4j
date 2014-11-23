@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
  * This class represents the root of the YQL result envelope.
  */
 @JsonRootName(value = "query")
-public class QueryResultType<CT extends ResultCollectionType<?>> {
+public class QueryResultType<CT> {
 
 	private int count;
 	private Date created;

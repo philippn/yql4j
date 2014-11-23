@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.yql4j.types.QueryResultType;
-import org.yql4j.types.ResultCollectionType;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -86,12 +85,12 @@ public final class YqlResult {
 	 * @param valueTypeRef
 	 *            the type to request
 	 * @param <CT>
-	 *            the result collection type
+	 *            the result content type
 	 * @return the content as mapped object graph
 	 * @throws IOException
 	 *             if an error occurred
 	 */
-	public <CT extends ResultCollectionType<?>> QueryResultType<CT> getContentAsMappedObject(
+	public <CT> QueryResultType<CT> getContentAsMappedObject(
 			TypeReference<QueryResultType<CT>> valueTypeRef) throws IOException {
 		return objectMapper.readValue(content, valueTypeRef);
 	}

@@ -29,8 +29,9 @@ import org.yql4j.YqlClients;
 import org.yql4j.YqlException;
 import org.yql4j.YqlQuery;
 import org.yql4j.YqlResult;
-import org.yql4j.test.types.PlaceCollectionType;
+import org.yql4j.test.types.PlaceArrayType;
 import org.yql4j.test.types.PlaceType;
+import org.yql4j.test.types.StockArrayType;
 import org.yql4j.types.QueryResultType;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -81,7 +82,7 @@ public class YqlClientTest {
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
 		assertTrue(result.getContentAsMappedObject(
-				new TypeReference<QueryResultType<PlaceCollectionType>>() {}).
+				new TypeReference<QueryResultType<PlaceArrayType>>() {}).
 				getResults() == null);
 	}
 
@@ -90,12 +91,12 @@ public class YqlClientTest {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Atlantic Ocean'");
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType> mappedResult = 
+		QueryResultType<PlaceArrayType> mappedResult = 
 				result.getContentAsMappedObject(
-						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
+						new TypeReference<QueryResultType<PlaceArrayType>>() {});
 		assertEquals(1, mappedResult.getCount());
 		assertNotNull(mappedResult.getResults());
-		PlaceType atlantic = mappedResult.getResults().getContent()[0];
+		PlaceType atlantic = mappedResult.getResults().getPlace()[0];
 		assertNotNull(atlantic);
 		assertEquals("Atlantic Ocean", atlantic.getName());
 	}
@@ -105,15 +106,15 @@ public class YqlClientTest {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Atlantic Ocean' or name='Indian Ocean'");
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType> mappedResult = 
+		QueryResultType<PlaceArrayType> mappedResult = 
 				result.getContentAsMappedObject(
-						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
+						new TypeReference<QueryResultType<PlaceArrayType>>() {});
 		assertEquals(2, mappedResult.getCount());
 		assertNotNull(mappedResult.getResults());
-		PlaceType atlantic = mappedResult.getResults().getContent()[0];
+		PlaceType atlantic = mappedResult.getResults().getPlace()[0];
 		assertNotNull(atlantic);
 		assertEquals("Atlantic Ocean", atlantic.getName());
-		PlaceType indian = mappedResult.getResults().getContent()[1];
+		PlaceType indian = mappedResult.getResults().getPlace()[1];
 		assertNotNull(indian);
 		assertEquals("Indian Ocean", indian.getName());
 	}
@@ -125,7 +126,7 @@ public class YqlClientTest {
 		query.setFormat(ResultFormat.JSON);
 		YqlResult result = client.query(query);
 		assertTrue(result.getContentAsMappedObject(
-				new TypeReference<QueryResultType<PlaceCollectionType>>() {}).
+				new TypeReference<QueryResultType<PlaceArrayType>>() {}).
 				getResults() == null);
 	}
 
@@ -135,12 +136,12 @@ public class YqlClientTest {
 		query.setDiagnostics(true);
 		query.setFormat(ResultFormat.JSON);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType> mappedResult = 
+		QueryResultType<PlaceArrayType> mappedResult = 
 				result.getContentAsMappedObject(
-						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
+						new TypeReference<QueryResultType<PlaceArrayType>>() {});
 		assertEquals(1, mappedResult.getCount());
 		assertNotNull(mappedResult.getResults());
-		PlaceType atlantic = mappedResult.getResults().getContent()[0];
+		PlaceType atlantic = mappedResult.getResults().getPlace()[0];
 		assertNotNull(atlantic);
 		assertEquals("Atlantic Ocean", atlantic.getName());
 	}
@@ -151,25 +152,46 @@ public class YqlClientTest {
 		query.setDiagnostics(true);
 		query.setFormat(ResultFormat.JSON);
 		YqlResult result = client.query(query);
-		QueryResultType<PlaceCollectionType> mappedResult = 
+		QueryResultType<PlaceArrayType> mappedResult = 
 				result.getContentAsMappedObject(
-						new TypeReference<QueryResultType<PlaceCollectionType>>() {});
+						new TypeReference<QueryResultType<PlaceArrayType>>() {});
 		assertEquals(2, mappedResult.getCount());
 		assertNotNull(mappedResult.getResults());
-		PlaceType atlantic = mappedResult.getResults().getContent()[0];
+		PlaceType atlantic = mappedResult.getResults().getPlace()[0];
 		assertNotNull(atlantic);
 		assertEquals("Atlantic Ocean", atlantic.getName());
-		PlaceType indian = mappedResult.getResults().getContent()[1];
+		PlaceType indian = mappedResult.getResults().getPlace()[1];
 		assertNotNull(indian);
 		assertEquals("Indian Ocean", indian.getName());
 	}
 
 	@Test
-	public void testOpenDataTablesQuery() throws Exception {
+	public void testStockMappingXml() throws Exception {
 		YqlQuery query = new YqlQuery("select * from yahoo.finance.stocks where symbol='ALV.DE'");
+		query.setDiagnostics(true);
 		query.useCommunityOpenDataTables();
 		YqlResult result = client.query(query);
-		assertTrue(result.getContentAsString().contains("Insurance"));
+		QueryResultType<StockArrayType> mappedResult = 
+				result.getContentAsMappedObject(
+						new TypeReference<QueryResultType<StockArrayType>>() {});
+		assertEquals(1, mappedResult.getCount());
+		assertNotNull(mappedResult.getResults());
+		assertEquals("Property & Casualty Insurance", mappedResult.getResults().getStock()[0].getIndustry());
+	}
+
+	@Test
+	public void testStockMappingJson() throws Exception {
+		YqlQuery query = new YqlQuery("select * from yahoo.finance.stocks where symbol='ALV.DE'");
+		query.setDiagnostics(true);
+		query.setFormat(ResultFormat.JSON);
+		query.useCommunityOpenDataTables();
+		YqlResult result = client.query(query);
+		QueryResultType<StockArrayType> mappedResult = 
+				result.getContentAsMappedObject(
+						new TypeReference<QueryResultType<StockArrayType>>() {});
+		assertEquals(1, mappedResult.getCount());
+		assertNotNull(mappedResult.getResults());
+		assertEquals("Property & Casualty Insurance", mappedResult.getResults().getStock()[0].getIndustry());
 	}
 
 	@Test

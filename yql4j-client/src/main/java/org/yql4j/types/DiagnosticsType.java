@@ -16,6 +16,7 @@
 package org.yql4j.types;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
 /**
  * This class represents the <code>diagnostics</code> type used in the YQL
@@ -24,7 +25,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class DiagnosticsType {
 
 	private boolean publiclyCallable;
-	private UrlType url;
+	private UrlType[] url;
+	private CacheType[] cache;
+	private QueryType[] query;
+	private JavascriptType javascript;
 	private long userTime;
 	private long serviceTime;
 	private String buildVersion;
@@ -45,9 +49,24 @@ public class DiagnosticsType {
 	}
 
 	/**
+	 * @return the cache
+	 */
+	public CacheType[] getCache() {
+		return cache;
+	}
+
+	/**
+	 * @param cache the cache to set
+	 */
+	@JacksonXmlElementWrapper(useWrapping=false)
+	public void setCache(CacheType[] cache) {
+		this.cache = cache;
+	}
+
+	/**
 	 * @return the url
 	 */
-	public UrlType getUrl() {
+	public UrlType[] getUrl() {
 		return url;
 	}
 
@@ -55,8 +74,38 @@ public class DiagnosticsType {
 	 * @param url
 	 *            the url to set
 	 */
-	public void setUrl(UrlType url) {
+	@JacksonXmlElementWrapper(useWrapping=false)
+	public void setUrl(UrlType[] url) {
 		this.url = url;
+	}
+
+	/**
+	 * @return the query
+	 */
+	public QueryType[] getQuery() {
+		return query;
+	}
+
+	/**
+	 * @param query the query to set
+	 */
+	@JacksonXmlElementWrapper(useWrapping=false)
+	public void setQuery(QueryType[] query) {
+		this.query = query;
+	}
+
+	/**
+	 * @return the javascript
+	 */
+	public JavascriptType getJavascript() {
+		return javascript;
+	}
+
+	/**
+	 * @param javascript the javascript to set
+	 */
+	public void setJavascript(JavascriptType javascript) {
+		this.javascript = javascript;
 	}
 
 	/**
