@@ -53,6 +53,6 @@ by using the following Maven coordinates:
 <dependency>
     <groupId>org.yql4j</groupId>
     <artifactId>yql4j-client</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.1</version>
 </dependency>
 ```
