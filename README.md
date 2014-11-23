@@ -21,11 +21,11 @@ String rawResult = result.getContentAsString();
 
 // But if you are lazy, you may also get the content mapped as object graph
 // Please note though: You will have to provide your own mapping classes, 
-// i.e. PlaceCollectionType and PlaceType!
-QueryResultType<PlaceCollectionType> mappedResult = 
+// i.e. PlaceArrayType and PlaceType!
+QueryResultType<PlaceArrayType> mappedResult = 
 		result.getContentAsMappedObject(
-				new TypeReference<QueryResultType<PlaceCollectionType>>() {});
-for (PlaceType item : mappedResult.getResults().getContent()) {
+				new TypeReference<QueryResultType<PlaceArrayType>>() {});
+for (PlaceType item : mappedResult.getResults().getPlace()) {
 	// Do something with the item
 }
 ```
