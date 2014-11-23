@@ -133,7 +133,8 @@ public class HttpComponentsYqlClient implements YqlClient {
 					for (Header header : response.getAllHeaders()) {
 						headers.put(header.getName(), header.getValue());
 					}
-					return new YqlResult(EntityUtils.toString(entity), headers,
+					return new YqlResult(EntityUtils.toString(entity), headers, 
+							query.getFormat() != null ? query.getFormat() : ResultFormat.XML, 
 							getAppropriateMapper(query));
 				} else if (isClientError(response)) {
 					HttpEntity entity = response.getEntity();

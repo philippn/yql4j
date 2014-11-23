@@ -31,8 +31,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public final class YqlResult {
 
-	private Map<String, String> headers = new HashMap<>();
 	private String content;
+	private Map<String, String> headers = new HashMap<>();
+	private ResultFormat format;
 	private ObjectMapper objectMapper;
 
 	/**
@@ -42,16 +43,20 @@ public final class YqlResult {
 	 *            the content as <code>String</code>
 	 * @param headers
 	 *            the headers returned
+	 * @param format
+	 *            the result format
 	 * @param objectMapper
 	 *            the object mapper to use
 	 */
 	public YqlResult(String content, Map<String, String> headers,
-			ObjectMapper objectMapper) {
+			ResultFormat format, ObjectMapper objectMapper) {
 		checkNotNull(content);
 		checkNotNull(headers);
+		checkNotNull(format);
 		checkNotNull(objectMapper);
 		this.content = content;
 		this.headers = headers;
+		this.format = format;
 		this.objectMapper = objectMapper;
 	}
 
@@ -60,6 +65,13 @@ public final class YqlResult {
 	 */
 	public Map<String, String> getHeaders() {
 		return headers;
+	}
+
+	/**
+	 * @return the format
+	 */
+	public ResultFormat getFormat() {
+		return format;
 	}
 
 	/**

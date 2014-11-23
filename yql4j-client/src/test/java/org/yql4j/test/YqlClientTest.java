@@ -81,6 +81,7 @@ public class YqlClientTest {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Nordsee'");
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
+		assertEquals(ResultFormat.XML, result.getFormat());
 		assertTrue(result.getContentAsMappedObject(
 				new TypeReference<QueryResultType<PlaceArrayType>>() {}).
 				getResults() == null);
@@ -91,6 +92,7 @@ public class YqlClientTest {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Atlantic Ocean'");
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
+		assertEquals(ResultFormat.XML, result.getFormat());
 		QueryResultType<PlaceArrayType> mappedResult = 
 				result.getContentAsMappedObject(
 						new TypeReference<QueryResultType<PlaceArrayType>>() {});
@@ -106,6 +108,7 @@ public class YqlClientTest {
 		YqlQuery query = new YqlQuery("select * from geo.oceans where name='Atlantic Ocean' or name='Indian Ocean'");
 		query.setDiagnostics(true);
 		YqlResult result = client.query(query);
+		assertEquals(ResultFormat.XML, result.getFormat());
 		QueryResultType<PlaceArrayType> mappedResult = 
 				result.getContentAsMappedObject(
 						new TypeReference<QueryResultType<PlaceArrayType>>() {});
@@ -125,6 +128,7 @@ public class YqlClientTest {
 		query.setDiagnostics(true);
 		query.setFormat(ResultFormat.JSON);
 		YqlResult result = client.query(query);
+		assertEquals(ResultFormat.JSON, result.getFormat());
 		assertTrue(result.getContentAsMappedObject(
 				new TypeReference<QueryResultType<PlaceArrayType>>() {}).
 				getResults() == null);
@@ -136,6 +140,7 @@ public class YqlClientTest {
 		query.setDiagnostics(true);
 		query.setFormat(ResultFormat.JSON);
 		YqlResult result = client.query(query);
+		assertEquals(ResultFormat.JSON, result.getFormat());
 		QueryResultType<PlaceArrayType> mappedResult = 
 				result.getContentAsMappedObject(
 						new TypeReference<QueryResultType<PlaceArrayType>>() {});
@@ -152,6 +157,7 @@ public class YqlClientTest {
 		query.setDiagnostics(true);
 		query.setFormat(ResultFormat.JSON);
 		YqlResult result = client.query(query);
+		assertEquals(ResultFormat.JSON, result.getFormat());
 		QueryResultType<PlaceArrayType> mappedResult = 
 				result.getContentAsMappedObject(
 						new TypeReference<QueryResultType<PlaceArrayType>>() {});
