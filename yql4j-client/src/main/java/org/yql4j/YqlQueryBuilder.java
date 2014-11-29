@@ -34,6 +34,7 @@ public class YqlQueryBuilder {
 	private Boolean diagnostics;
 	private ResultFormat format;
 	private List<String> environmentFiles = new ArrayList<>();
+	private Map<String, String> tableFiles = new HashMap<>();
 	private String queryString;
 	private String aliasPrefix;
 	private String aliasName;
@@ -134,7 +135,7 @@ public class YqlQueryBuilder {
 	 *            the environment file
 	 * @return the builder
 	 */
-	public YqlQueryBuilder withEnvironmentFile(String environmentFile) {
+	public YqlQueryBuilder withEnvironment(String environmentFile) {
 		checkNotNull(environmentFile);
 		environmentFiles.add(environmentFile);
 		return this;
@@ -146,7 +147,23 @@ public class YqlQueryBuilder {
 	 * @return the builder
 	 */
 	public YqlQueryBuilder withCommunityOpenDataTables() {
-		return withEnvironmentFile(ENV_COMMUNITY_OPEN_DATA_TABLES);
+		return withEnvironment(ENV_COMMUNITY_OPEN_DATA_TABLES);
+	}
+
+	/**
+	 * Prepends a <code>USE TABLE</code> statement to the query.
+	 * 
+	 * @param tableFile
+	 *            the tableFile to add
+	 * @param alias
+	 *            the alias to assign to the table
+	 * @return the builder
+	 */
+	public YqlQueryBuilder withTable(String tableFile, String alias) {
+		checkNotNull(tableFile);
+		checkNotNull(alias);
+		tableFiles.put(tableFile, alias);
+		return this;
 	}
 
 	/**
@@ -185,6 +202,9 @@ public class YqlQueryBuilder {
 		}
 		for (String env : environmentFiles) {
 			query.addEnvironmentFile(env);
+		}
+		for (Entry<String, String> entry : tableFiles.entrySet()) {
+			query.addTableFile(entry.getKey(), entry.getValue());
 		}
 		for (Entry<String, String> var : variables.entrySet()) {
 			query.addVariable(var.getKey(), var.getValue());

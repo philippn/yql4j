@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.yql4j.YqlQuery.ENV_COMMUNITY_OPEN_DATA_TABLES;
 
 import org.junit.Test;
 import org.yql4j.ResultFormat;
@@ -89,4 +90,23 @@ public class YqlQueryBuilderTest {
 		assertEquals("Arctic Ocean", query.getVariableValue("name"));
 	}
 
+	@Test
+	public void testQueryWithEnvironment() throws Exception {
+		YqlQueryBuilder builder = YqlQueryBuilder.fromQueryString("select * from yahoo.finance.stocks where symbol='ALV.DE'");
+		builder.withEnvironment(ENV_COMMUNITY_OPEN_DATA_TABLES);
+		YqlQuery query = builder.build();
+		assertEquals(1, query.getEnvironmentFiles().size());
+		assertEquals(ENV_COMMUNITY_OPEN_DATA_TABLES, query.getEnvironmentFiles().get(0));
+	}
+
+	@Test
+	public void testQueryWithTable() throws Exception {
+		String tableFile = "https://raw.githubusercontent.com/philippn/"
+				+ "yql-tables/master/yahoo.finance.components.xml";
+		YqlQueryBuilder builder = YqlQueryBuilder.fromQueryString("select * from mytable where symbol='^GDAXI'");
+		builder.withTable(tableFile, "mytable");
+		YqlQuery query = builder.build();
+		assertEquals(1, query.getTableFiles().size());
+		assertEquals("mytable", query.getTableFiles().get(tableFile));
+	}
 }

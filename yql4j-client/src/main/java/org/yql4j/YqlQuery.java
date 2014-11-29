@@ -17,6 +17,7 @@ package org.yql4j;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableMap;
 import static java.util.Collections.unmodifiableSet;
 
 import java.net.URI;
@@ -58,6 +59,7 @@ public final class YqlQuery {
 	private boolean diagnostics;
 	private ResultFormat format;
 	private List<String> environmentFiles = new ArrayList<>();
+	private Map<String, String> tableFiles = new HashMap<>();
 	private String queryString;
 	private String aliasPrefix;
 	private String aliasName;
@@ -191,6 +193,36 @@ public final class YqlQuery {
 	}
 
 	/**
+	 * @return the tableFiles
+	 */
+	public Map<String, String> getTableFiles() {
+		return unmodifiableMap(tableFiles);
+	}
+
+	/**
+	 * @param tableFile
+	 *            the tableFile to add
+	 * @param alias
+	 *            the alias to assign to the table
+	 */
+	public void addTableFile(String tableFile, String alias) {
+		checkNotNull(tableFile);
+		checkNotNull(alias);
+		tableFiles.put(tableFile, alias);
+		clearUri();
+	}
+
+	/**
+	 * @param tableFile
+	 *            the tableFile to remove
+	 */
+	public void removeTableFile(String tableFile) {
+		checkNotNull(tableFile);
+		tableFiles.remove(tableFile);
+		clearUri();
+	}
+
+	/**
 	 * @return the queryString
 	 */
 	public String getQueryString() {
@@ -288,7 +320,11 @@ public final class YqlQuery {
 				builder.addParameter("format", format.name().toLowerCase());
 			}
 			if (!aliasQuery) {
-				builder.addParameter("q", queryString);
+				String useTablesPrefix = "";
+				for (Entry<String, String> entry : tableFiles.entrySet()) {
+					useTablesPrefix += "USE '" + entry.getKey() + "' AS " + entry.getValue() + "; ";
+				}
+				builder.addParameter("q", useTablesPrefix + queryString);
 			}
 			for (Entry<String, String> varDef : variables.entrySet()) {
 				builder.addParameter(varDef.getKey(), varDef.getValue());

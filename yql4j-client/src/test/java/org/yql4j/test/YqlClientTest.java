@@ -201,6 +201,20 @@ public class YqlClientTest {
 	}
 
 	@Test
+	public void testUseTable() throws Exception {
+		String tableFile = "https://raw.githubusercontent.com/philippn/"
+				+ "yql-tables/master/yahoo.finance.components.xml";
+		YqlQuery query = new YqlQuery("select * from mytable where symbol='^GDAXI'");
+		query.setDiagnostics(true);
+		query.addTableFile(tableFile, "mytable");
+		YqlResult result = client.query(query);
+		QueryResultType<String[]> mappedResult = 
+				result.getContentAsMappedObject(
+						new TypeReference<QueryResultType<String[]>>() {});
+		assertEquals(30, mappedResult.getCount());
+	}
+
+	@Test
 	public void testErrorHandling() throws Exception {
 		YqlQuery query = new YqlQuery("select * from yahoo.finance.stocks where symbol='ALV.DE'");
 		try {
