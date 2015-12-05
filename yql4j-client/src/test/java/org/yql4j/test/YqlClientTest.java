@@ -32,6 +32,7 @@ import org.yql4j.YqlResult;
 import org.yql4j.test.types.PlaceArrayType;
 import org.yql4j.test.types.PlaceType;
 import org.yql4j.test.types.StockArrayType;
+import org.yql4j.test.types.StockType;
 import org.yql4j.types.QueryResultType;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -173,31 +174,45 @@ public class YqlClientTest {
 
 	@Test
 	public void testStockMappingXml() throws Exception {
-		YqlQuery query = new YqlQuery("select * from yahoo.finance.stocks where symbol='ALV.DE'");
+		String tableFile = "https://raw.githubusercontent.com/philippn/"
+				+ "yql-tables/master/yahoo.finance.stocks.xml";
+		YqlQuery query = new YqlQuery("select * from mytable where symbol='ALV.DE'");
 		query.setDiagnostics(true);
-		query.useCommunityOpenDataTables();
+		query.addTableFile(tableFile, "mytable");
 		YqlResult result = client.query(query);
 		QueryResultType<StockArrayType> mappedResult = 
 				result.getContentAsMappedObject(
 						new TypeReference<QueryResultType<StockArrayType>>() {});
 		assertEquals(1, mappedResult.getCount());
 		assertNotNull(mappedResult.getResults());
-		assertEquals("Property & Casualty Insurance", mappedResult.getResults().getStock()[0].getIndustry());
+		StockType stock = mappedResult.getResults().getStock()[0];
+		assertEquals("Allianz SE", stock.getCompanyName());
+		assertEquals("XETRA", stock.getMarket());
+		assertEquals("Financial", stock.getSector());
+		assertEquals("Property & Casualty Insurance", stock.getIndustry());
+		assertTrue(stock.getFullTimeEmployees() > 0);
 	}
 
 	@Test
 	public void testStockMappingJson() throws Exception {
-		YqlQuery query = new YqlQuery("select * from yahoo.finance.stocks where symbol='ALV.DE'");
+		String tableFile = "https://raw.githubusercontent.com/philippn/"
+				+ "yql-tables/master/yahoo.finance.stocks.xml";
+		YqlQuery query = new YqlQuery("select * from mytable where symbol='ALV.DE'");
 		query.setDiagnostics(true);
 		query.setFormat(ResultFormat.JSON);
-		query.useCommunityOpenDataTables();
+		query.addTableFile(tableFile, "mytable");
 		YqlResult result = client.query(query);
 		QueryResultType<StockArrayType> mappedResult = 
 				result.getContentAsMappedObject(
 						new TypeReference<QueryResultType<StockArrayType>>() {});
 		assertEquals(1, mappedResult.getCount());
 		assertNotNull(mappedResult.getResults());
-		assertEquals("Property & Casualty Insurance", mappedResult.getResults().getStock()[0].getIndustry());
+		StockType stock = mappedResult.getResults().getStock()[0];
+		assertEquals("Allianz SE", stock.getCompanyName());
+		assertEquals("XETRA", stock.getMarket());
+		assertEquals("Financial", stock.getSector());
+		assertEquals("Property & Casualty Insurance", stock.getIndustry());
+		assertTrue(stock.getFullTimeEmployees() > 0);
 	}
 
 	@Test

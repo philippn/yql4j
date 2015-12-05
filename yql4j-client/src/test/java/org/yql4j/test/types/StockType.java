@@ -27,6 +27,7 @@ public class StockType {
 
 	private String symbol;
 	private String companyName;
+	private String market;
 	private Date start;
 	private Date end;
 	private String sector;
@@ -60,6 +61,21 @@ public class StockType {
 	@JsonProperty("CompanyName")
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+
+	/**
+	 * @return the market
+	 */
+	public String getMarket() {
+		return market;
+	}
+
+	/**
+	 * @param market the market to set
+	 */
+	@JsonProperty("Market")
+	public void setMarket(String market) {
+		this.market = market;
 	}
 
 	/**
