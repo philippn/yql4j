@@ -27,6 +27,7 @@ public class UrlType {
 	private long executionStopTime;
 	private long executionTime;
 	private String content;
+	private String proxy;
 
 	/**
 	 * @return the executionStartTime
@@ -90,5 +91,20 @@ public class UrlType {
 	@JacksonXmlText
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	/**
+	 * @return the proxy
+	 */
+	public String getProxy() {
+		return proxy;
+	}
+
+	/**
+	 * @param proxy the proxy to set
+	 */
+	@JsonProperty("proxy")
+	public void setProxy(String proxy) {
+		this.proxy = proxy;
 	}
 }
