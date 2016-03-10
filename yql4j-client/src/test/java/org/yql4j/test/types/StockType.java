@@ -32,7 +32,7 @@ public class StockType {
 	private Date end;
 	private String sector;
 	private String industry;
-	private int fullTimeEmployees;
+	private String fullTimeEmployees;
 
 	/**
 	 * @return the symbol
@@ -139,7 +139,7 @@ public class StockType {
 	/**
 	 * @return the fullTimeEmployees
 	 */
-	public int getFullTimeEmployees() {
+	public String getFullTimeEmployees() {
 		return fullTimeEmployees;
 	}
 
@@ -147,7 +147,7 @@ public class StockType {
 	 * @param fullTimeEmployees the fullTimeEmployees to set
 	 */
 	@JsonProperty("FullTimeEmployees")
-	public void setFullTimeEmployees(int fullTimeEmployees) {
+	public void setFullTimeEmployees(String fullTimeEmployees) {
 		this.fullTimeEmployees = fullTimeEmployees;
 	}
 }
